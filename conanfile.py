@@ -77,7 +77,7 @@ class AssimpConan(ConanFile):
     cmake_patch_file = "cmake_msvc.patch"
     exports_sources = [cmake_patch_file]
 
-    def configure(self):
+    def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
 

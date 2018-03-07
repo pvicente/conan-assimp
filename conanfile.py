@@ -81,6 +81,10 @@ class AssimpConan(ConanFile):
         if self.settings.os == "Windows":
             del self.options.fPIC
 
+            # X3D Importer is broken on VS2017 for 4.0.1. Fixed in HEAD, so remove this next version
+            if self.settings.compiler == "Visual Studio" and self.settings.compiler.version == "15":
+                self.options.with_x3d = False
+
     def source(self):
         source_url = "%s/archive/v%s.zip" % (self.homepage, self.version)
         tools.get(source_url)
@@ -115,10 +119,6 @@ conan_basic_setup()''')
         cmake.definitions["ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT"] = False
         for option, definition in self.format_option_map.items():
             cmake.definitions[definition] = bool(getattr(self.options, option))
-
-        # X3D Importer is broken on VS2017 for 4.0.1. Fixed in HEAD, so remove this next version
-        if self.settings.compiler == "Visual Studio":
-            self.options.with_x3d = False
 
         cmake.configure(source_folder=self.source_subfolder)
         cmake.build()

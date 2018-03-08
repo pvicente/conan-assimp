@@ -1,0 +1,12 @@
+diff --git a/sources/code/D3MFOpcPackage.cpp b/sources/code/D3MFOpcPackage.cpp
+index 562b891b..ff6fddcd 100644
+--- a/sources/code/D3MFOpcPackage.cpp
++++ b/sources/code/D3MFOpcPackage.cpp
+@@ -49,6 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include <assimp/DefaultLogger.hpp>
+ #include <assimp/ai_assert.h>
+
++#include <cstdlib>
+ #include <memory>
+ #include <vector>
+ #include <map>

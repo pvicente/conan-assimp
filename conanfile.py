@@ -75,7 +75,7 @@ class AssimpConan(ConanFile):
     generators = "cmake"
     exports = ["LICENSE.md"]
     cmake_patch_file = "cmake_msvc.patch"
-    exports_sources = [cmake_patch_file]
+    exports_sources = [cmake_patch_file, "D3MFOpcPackage.patch"]
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -89,6 +89,8 @@ class AssimpConan(ConanFile):
         source_url = "%s/archive/v%s.zip" % (self.homepage, self.version)
         tools.get(source_url)
         os.rename("assimp-%s" % (self.version,), self.source_subfolder)
+
+        tools.patch(patch_file="D3MFOpcPackage.patch")
 
         if self.settings.os == "Windows":
             # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC

@@ -74,8 +74,7 @@ class AssimpConan(ConanFile):
     default_options += "=True\n".join(format_option_map.keys()) + "=True"
     generators = "cmake"
     exports = ["LICENSE.md"]
-    cmake_patch_file = "cmake_msvc.patch"
-    exports_sources = [cmake_patch_file, "D3MFOpcPackage.patch"]
+    exports_sources = ["patches/*"]
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -90,12 +89,13 @@ class AssimpConan(ConanFile):
         tools.get(source_url)
         os.rename("assimp-%s" % (self.version,), self.source_subfolder)
 
-        tools.patch(patch_file="D3MFOpcPackage.patch")
+        # when using clang and compiler.libcxx=libc++ build is failing due to <cstdlib> is not included
+        tools.patch(patch_file="patches/D3MFOpcPackage.patch")
 
         if self.settings.os == "Windows":
             # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC
             # if the packaged project doesn't have variables to set it properly
-            tools.patch(patch_file=self.cmake_patch_file)
+            tools.patch(patch_file="patches/cmake_msvc.patch")
 
         tools.replace_in_file("%s/CMakeLists.txt" % self.source_subfolder, "PROJECT( Assimp )", '''PROJECT( Assimp )
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
